@@ -1,0 +1,5989 @@
+{
+	"info": {
+		"_postman_id": "0f093af1-3085-4450-a6de-f3a1514007be",
+		"name": "Remember",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22433184"
+	},
+	"item": [
+		{
+			"name": "Values",
+			"item": [
+				{
+					"name": "PostPersonalValues",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalues",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPersonalValuesByCategoryAndUserId",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json()\r",
+									"\r",
+									"pm.test('The `title` contains', () => {\r",
+									"    _.each(response.title, (item) => {\r",
+									"        pm.expect(item.clientName).to.include('Generosity')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"pm.test('Get random value with TEST in the title', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"    pm.expect(response.length).to.be.above(0);\r",
+									"\r",
+									"    var element = response.filter(function(item) { return item.title.includes ('TEST'); });\r",
+									"    if (element.length > 0) {\r",
+									"        const index = Math.trunc(Math.random() * element.length);\r",
+									"        const item = element[index];\r",
+									"        pm.collectionVariables.set('ValueID', item.id);\r",
+									"    } \r",
+									"    \r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/category/{{ValueCategoryId}}/user/{{MikeUserID}}/personalvalues",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category",
+								"{{ValueCategoryId}}",
+								"user",
+								"{{MikeUserID}}",
+								"personalvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPersonalValueByCategoryId",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"let response = pm.response.json()\r",
+									"\r",
+									"pm.test('The `title` is a string', () => {\r",
+									"    _.each(response.title, (item) => {\r",
+									"        pm.expect(item.clientName).to.be.a('string')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"pm.test('The Custom Value is a boolean', () => {\r",
+									"    _.each(response.customValue, (item) => {\r",
+									"        pm.expect(item.clientName).to.be.a('boolean')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/category/{{ValueCategoryId}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category",
+								"{{ValueCategoryId}}",
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPersonalValueById",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Title should be a String\", function () {\r",
+									"    pm.expect(response.title).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an object\", () =>{\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedValueId = pm.collectionVariables.get('ValueID');\r",
+									"    pm.expect(response.id).to.eql(requestedValueId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue?id={{ValueID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{ValueID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPersonalValueByUserId",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"let response = pm.response.json()\r",
+									"\r",
+									"pm.test('The `title` is a string', () => {\r",
+									"    _.each(response.title, (item) => {\r",
+									"        pm.expect(item.clientName).to.be.a('string')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"pm.test('The Custom Value is a boolean', () => {\r",
+									"    _.each(response.customValue, (item) => {\r",
+									"        pm.expect(item.clientName).to.be.a('boolean')\r",
+									"    })\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user/{{UserId}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user",
+								"{{UserId}}",
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostPersonalValues - Custom Value False - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": false,\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalues",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostPersonalValues - No Title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalues",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostPersonalValues - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"{{$randomBsBuzz}} Value\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalues",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostPersonalValues - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}} Value\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalues",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostPersonalValues - No CategoryID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"{{$randomBsBuzz}} Value\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalues",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutPersonalValue",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{ValueID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutPersonalValue - Custom Value False - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{ValueID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": false,\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutPersonalValue - No Title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{ValueID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutPersonalValue - No Category Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{ValueID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"userId\": \"{{UserId}}\"\r\n  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutPersonalValue - No User Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{ValueID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutPersonalValue - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomBsBuzz}}\",\r\n  \"description\": \"This is a test value\",\r\n  \"color\": \"red\",\r\n  \"customValue\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"categoryId\": \"{{ValueCategoryId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletePersonaValue",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Delete was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue?id={{ValueID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{ValueID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "PostUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"firstName\":\" TEST{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"phoneNumber\": \"{{$randomPhoneNumber}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostUser - No First Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"phoneNumber\": \"{{$randomPhoneNumber}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostUser - No Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"firstName\":\" TEST{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"phoneNumber\": \"{{$randomPhoneNumber}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostUser - No ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"firstName\":\" TEST{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"phoneNumber\": \"{{$randomPhoneNumber}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json()\r",
+									"\r",
+									"pm.test('Get random value with TEST in the title', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"    pm.expect(response.length).to.be.above(0);\r",
+									"\r",
+									"    var element = response.filter(function(item) { return item.firstName.includes ('TEST'); });\r",
+									"    if (element.length > 0) {\r",
+									"        const index = Math.trunc(Math.random() * element.length);\r",
+									"        const item = element[index];\r",
+									"        pm.collectionVariables.set('UserId', item.id);\r",
+									"        pm.collectionVariables.set('EmailId', item.email);\r",
+									"        pm.collectionVariables.set('PhoneNumber', item.phoneNumber);\r",
+									"    } \r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/users",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"First Name should be a String\", function () {\r",
+									"    pm.expect(jsonData.firstName).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Last Name should be a String\", function () {\r",
+									"    pm.expect(jsonData.lastName).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Email should be a String\", function () {\r",
+									"    pm.expect(jsonData.email).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Phone Number should be a String\", function () {\r",
+									"    pm.expect(jsonData.phoneNumber).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an object\", () =>{\r",
+									"    pm.expect(jsonData).to.be.an('object');\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedUserId = pm.collectionVariables.get('UserId');\r",
+									"    pm.expect(jsonData.id).to.eq(requestedUserId);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"const response = pm.response.json()\r",
+									"pm.test('Ensure item is there', () => {\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"    pm.collectionVariables.set('EmailId', response.email);\r",
+									"    pm.collectionVariables.set('PhoneNumber', response.phoneNumber);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user?id={{UserId}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{UserId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserByEmail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"First Name should be a String\", function () {\r",
+									"    pm.expect(jsonData.firstName).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Last Name should be a String\", function () {\r",
+									"    pm.expect(jsonData.lastName).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Email should be a String\", function () {\r",
+									"    pm.expect(jsonData.email).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Phone Number should be a String\", function () {\r",
+									"    pm.expect(jsonData.phoneNumber).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an object\", () =>{\r",
+									"    pm.expect(jsonData).to.be.an('object');\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedUserId = pm.collectionVariables.get('UserId');\r",
+									"    pm.expect(jsonData.id).to.eq(requestedUserId);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/email/{{EmailId}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"email",
+								"{{EmailId}}",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetUserByPhoneNumber",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"First Name should be a String\", function () {\r",
+									"    pm.expect(jsonData.firstName).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Last Name should be a String\", function () {\r",
+									"    pm.expect(jsonData.lastName).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Email should be a String\", function () {\r",
+									"    pm.expect(jsonData.email).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Phone Number should be a String\", function () {\r",
+									"    pm.expect(jsonData.phoneNumber).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an object\", () =>{\r",
+									"    pm.expect(jsonData).to.be.an('object');\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedUserId = pm.collectionVariables.get('UserId');\r",
+									"    pm.expect(jsonData.id).to.eq(requestedUserId);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/phonenumber/{{PhoneNumber}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"phonenumber",
+								"{{PhoneNumber}}",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{UserId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"firstName\": \"TEST {{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"phoneNumber\": \"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutUser - No First Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{UserId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"{{$randomEmail}}\",\r\n  \"phoneNumber\": \"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutUser - No Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{UserId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"firstName\": \"{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"phoneNumber\": \"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutUser - No ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"firstName\": \"{{$randomFirstName}}\",\r\n  \"lastName\": \"{{$randomLastName}}\",\r\n  \"email\": \"123Fake@gmail.com\",\r\n  \"phoneNumber\": \"1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/user",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Delete was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user?id={{UserId}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{UserId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "PostCategory",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST {{$randomLastName}}\",\r\n  \"color\": \"{{$randomColor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostCategory - No Color",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST{{$randomPhoneNumberExt}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostCategory - No Title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"color\": \"{{$randomColor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostCategory - No ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST{{$randomPhoneNumberExt}}\",\r\n  \"color\": \"{{$randomColor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllCategories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json()\r",
+									"\r",
+									"pm.test('Get random Category with TEST in the title', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"    pm.expect(response.length).to.be.above(0);\r",
+									"\r",
+									"    var element = response.filter(function(item) { return item.title.includes ('TEST'); });\r",
+									"    if (element.length > 0) {\r",
+									"        const index = Math.trunc(Math.random() * element.length);\r",
+									"        const item = element[index];\r",
+									"        pm.collectionVariables.set('CategoryID', item.id);\r",
+									"    } \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/categories",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategoryById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Title should be a String\", function () {\r",
+									"    pm.expect(response.title).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an object\", () =>{\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestCategoryId = pm.collectionVariables.get('CategoryID');\r",
+									"    pm.expect(response.id).to.eql(requestCategoryId);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/category?id={{CategoryID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{CategoryID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategoryById - No ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCategory",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear()"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{CategoryID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}\",\r\n  \"color\": \"{{$randomColor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCategory - No Color",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear()"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{CategoryID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCategory - No Title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear()"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{CategoryID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"color\": \"{{$randomColor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateCategory - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear()"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}\",\r\n  \"color\": \"{{$randomColor}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCategory",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"     pm.expect(pm.response.text()).to.include(\"Delete was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/category?id={{CategoryID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{CategoryID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCategory - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/category",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Goals",
+			"item": [
+				{
+					"name": "PostGoal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST {{$randomLastName}} Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"red\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - CustomGoal False - No UserID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST {{$randomLastName}} Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"red\",\r\n  \"customGoal\": false,\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - Title Longer than 100 Char",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}Goal 12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - No User ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"customGoal\": true,\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - No Color",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - No Description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST {{$randomLastName}} Goal\",\r\n  \"color\": \"red\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - No Title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"red\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - No Value ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostGoal - No ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST{{$randomLastName}}Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"red\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByPersonalValueId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an array', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test('Get random Goal with TEST in the title', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"    pm.expect(response.length).to.be.above(0);\r",
+									"\r",
+									"    var element = response.filter(function(item) { return item.title.includes ('TEST'); });\r",
+									"    if (element.length > 0) {\r",
+									"        const index = Math.trunc(Math.random() * element.length);\r",
+									"        const item = element[index];\r",
+									"        pm.collectionVariables.set('GoalId', item.id);\r",
+									"        console.log(item)\r",
+									"    } \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue/{{PersonalValueId}}/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue",
+								"{{PersonalValueId}}",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutGoal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{GoalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST {{$randomLastName}} Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"red\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutGoal - Title Longer Than 100 Char",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{GoalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST{{$randomAdjective}}Goal 12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutGoal - No Color",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{GoalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST{{$randomBs}}Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutGoal - No Description",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{GoalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST {{$randomLastName}} Goal\",\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutGoal - No Title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{GoalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"red\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutGoal - No Value ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{GoalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"title\": \"TEST{{$randomBs}}Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutGoal - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"valueId\": \"{{PersonalValueId}}\",\r\n  \"title\": \"TEST{{$randomBs}}Goal\",\r\n  \"description\": \"{{$randomBsBuzz}}\",\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"customGoal\": true,\r\n  \"userId\": \"{{UserId}}\",\r\n  \"completed\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalById",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Title should be a String\", function () {\r",
+									"    pm.expect(response.title).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an object\", () =>{\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedGoalId = pm.collectionVariables.get('GoalId');\r",
+									"    pm.expect(response.id).to.eq(requestedGoalId.toLowerCase());\r",
+									"});\r",
+									"\r",
+									"pm.test('Set Value Id', () => {\r",
+									"    var response = pm.response.json();\r",
+									"    pm.collectionVariables.set('PersonalValueId', response.valueId)\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/goal?id={{GoalId}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{GoalId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalById - ID Nonsense",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/goal?id=Thisisnotarealid",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "Thisisnotarealid"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalById - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/goal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByUserID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response is an array\", () =>{\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('The `title` is a string', () => {\r",
+									"    _.each(response.title, (item) => {\r",
+									"        pm.expect(item.clientName).to.be.a('string')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"pm.test('The `customGoal` is a boolean', () => {\r",
+									"    _.each(response.customGoal, (item) => {\r",
+									"        pm.expect(item.customGoal).to.be.a('boolean')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"pm.test('The `completed` is a boolean', () => {\r",
+									"    _.each(response.completed, (item) => {\r",
+									"        pm.expect(item.completed).to.be.a('boolean')\r",
+									"    })\r",
+									"})\r",
+									"\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user/{{UserId}}/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user",
+								"{{UserId}}",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByUserID - Nonsense User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user/thisisnotavaliduserid/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user",
+								"thisisnotavaliduserid",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByUserID - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByPersonalValueIdAndUserId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an array', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue/{{PersonalValueId}}/user/{{UserId}}/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue",
+								"{{PersonalValueId}}",
+								"user",
+								"{{UserId}}",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByPersonalValueIdAndUserId - Invalid User ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue/{{PersonalValueId}}/user/thisisnotavalidid/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue",
+								"{{PersonalValueId}}",
+								"user",
+								"thisisnotavalidid",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByPersonalValueIdAndUserId - No User ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue/{{PersonalValueId}}/user/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue",
+								"{{PersonalValueId}}",
+								"user",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByPersonalValueIdAndUserId - Invalid Value ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue/thisisnotavalidid/user/{{UserId}}/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue",
+								"thisisnotavalidid",
+								"user",
+								"{{UserId}}",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetGoalsByPersonalValueIdAndUserId - No Value ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/personalvalue/user/{{UserId}}/goals",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"personalvalue",
+								"user",
+								"{{UserId}}",
+								"goals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteGoal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Delete was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/goal?id={{GoalId}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"goal"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{GoalId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Journal",
+			"item": [
+				{
+					"name": "AddJournal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"createdDate\": \"{{$isoTimestamp}}\",\r\n  \"updatedDate\": \"{{$isoTimestamp}}\",\r\n  \"journalEntry\": \"TEST{{$randomBsBuzz}}journalEntry\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddJournal - No Journal Entry",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"createdDate\": \"{{$isoTimestamp}}\",\r\n  \"updatedDate\": \"{{$isoTimestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddJournal - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"createdDate\": \"{{$isoTimestamp}}\",\r\n  \"updatedDate\": \"{{$isoTimestamp}}\",\r\n  \"journalEntry\": \"TEST{{$randomBsBuzz}}journalEntry\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddJournal - No ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"createdDate\": \"{{$isoTimestamp}}\",\r\n  \"updatedDate\": \"{{$isoTimestamp}}\",\r\n  \"journalEntry\": \"TEST{{$randomBsBuzz}}journalEntry\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetJournalByUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an array', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test('Get random journal with TEST in the title', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"    pm.expect(response.length).to.be.above(0);\r",
+									"\r",
+									"    var element = response.filter(function(item) { return item.journalEntry.includes ('TEST'); });\r",
+									"    if (element.length > 0) {\r",
+									"        const index = Math.trunc(Math.random() * element.length);\r",
+									"        const item = element[index];\r",
+									"        pm.collectionVariables.set('JournalId', item.id);\r",
+									"    } \r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user/{{MikeUserID}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user",
+								"{{MikeUserID}}",
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetJournalByUser - No User ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user",
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetJournalById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Journal Entry should be a String\", function () {\r",
+									"    pm.expect(response.journalEntry).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is an object\", () =>{\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedJournalId = pm.collectionVariables.get('JournalId');\r",
+									"    pm.expect(response.id).to.eq(requestedJournalId.toLowerCase());\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/journal?guid={{JournalId}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							],
+							"query": [
+								{
+									"key": "guid",
+									"value": "{{JournalId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetJournalById - No Journal ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateJournal",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{JournalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"createdDate\": \"2024-03-13T19:27:15.433Z\",\r\n  \"updatedDate\": \"2024-03-13T19:27:15.433Z\",\r\n  \"journalEntry\": \"TESTJournalEntry\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateJournal - No Journal Entry",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{JournalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"createdDate\": \"2024-03-13T19:27:15.433Z\",\r\n  \"updatedDate\": \"2024-03-13T19:27:15.433Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateJournal - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{JournalId}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"createdDate\": \"2024-03-13T19:27:15.433Z\",\r\n  \"updatedDate\": \"2024-03-13T19:27:15.433Z\",\r\n  \"journalEntry\": \"TESTJournalEntry\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateJournal -  No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{UserId}}\",\r\n  \"createdDate\": \"2024-03-13T19:27:15.433Z\",\r\n  \"updatedDate\": \"2024-03-13T19:27:15.433Z\",\r\n  \"journalEntry\": \"TESTJournalEntry\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/journal",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteJournal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Delete was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/journal?id={{JournalId}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"journal"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{JournalId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BasicTasks",
+			"item": [
+				{
+					"name": "PostBasicTask",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": true,\r\n  \"color\": \"red\",\r\n  \"isDelegatedTask\": false,\r\n  \"priority\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostBasicTask - No Task Title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": true,\r\n  \"color\": \"red\",\r\n  \"isDelegatedTask\": false,\r\n  \"priority\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostBasicTask - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": true,\r\n  \"color\": \"red\",\r\n  \"isDelegatedTask\": false,\r\n  \"priority\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostBasicTask - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{UserId}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": true,\r\n  \"color\": \"red\",\r\n  \"isDelegatedTask\": false,\r\n  \"priority\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetBasicTaskByUserId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an array', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test('Get random task with TEST in the title', () => {\r",
+									"    pm.expect(response.length).to.be.above(0);\r",
+									"\r",
+									"    var element = response.filter(function(item) { return item.taskTitle.includes ('TEST'); });\r",
+									"    if (element.length > 0) {\r",
+									"        const index = Math.trunc(Math.random() * element.length);\r",
+									"        const item = element[index];\r",
+									"        pm.collectionVariables.set('TaskID', item.id);\r",
+									"    } \r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/User/{{MikeUserID}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"User",
+								"{{MikeUserID}}",
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetBasicTaskById",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an object', () => {\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedTaskId = pm.collectionVariables.get('TaskID');\r",
+									"    pm.expect(response.id).to.eql(requestedTaskId.toLowerCase());\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Title should be a String\", function () {\r",
+									"    pm.expect(response.taskTitle).to.be.a('string');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/basictask?id={{TaskID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{TaskID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostNote",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"taskId\": \"{{TaskID}}\",\r\n  \"noteContents\": \"TEST {{$randomBsBuzz}} note\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/note",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"note"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetNote-TaskID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an object', () => {\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"pm.test('ID is a string', () => {\r",
+									"    pm.expect(response.id).to.be.a('string');\r",
+									"})\r",
+									"\r",
+									"pm.test('ID is not null', () => {\r",
+									"    pm.expect(response.id).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test('taskID is not null', () => {\r",
+									"    pm.expect(response.taskId).to.not.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"NoteID\", response.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/task/{{TaskID}}/note",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"task",
+								"{{TaskID}}",
+								"note"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetNote",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"var response = pm.response.json();",
+									"",
+									"pm.test('Response is an object', () => {",
+									"    pm.expect(response).to.be.an('object');",
+									"})",
+									"",
+									"pm.test('ID is a string', () => {",
+									"    pm.expect(response.id).to.be.a('string');",
+									"})",
+									"",
+									"pm.test('ID is not null', () => {",
+									"    pm.expect(response.id).to.not.be.null;",
+									"});",
+									"",
+									"pm.test('taskID is not null', () => {",
+									"    pm.expect(response.taskId).to.not.be.null;",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/note?guid={{NoteID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"note"
+							],
+							"query": [
+								{
+									"key": "guid",
+									"value": "{{NoteID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutNote",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{NoteID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"taskId\": \"{{TaskID}}\",\r\n  \"noteContents\": \"TEST {{$randomBsBuzz}} note\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/note",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"note"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteNote",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Delete was successful\");",
+									"});",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/note?id={{NoteID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"note"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{NoteID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutBasicTask",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{TaskID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": false,\r\n  \"priority\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutBasicTask - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{TaskID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": false,\r\n  \"priority\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutBasicTask - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": false,\r\n  \"priority\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/basictask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteBasicTask",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Delete was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/basictask?id={{TaskID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"basictask"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{TaskID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DelegatedTasks",
+			"item": [
+				{
+					"name": "PostDelegatedTask",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": true,\r\n  \"priority\": 0,\r\n  \"delegatedUser\": \"{{TroyUserID}}\",\r\n  \"delegatedDate\": \"{{$isoTimestamp}}\",\r\n  \"delegateeClaimsCompleted\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostDelegatedTask - No Delegated User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": true,\r\n  \"priority\": 0,\r\n  \"delegatedDate\": \"{{$isoTimestamp}}\",\r\n  \"delegateeClaimsCompleted\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostDelegatedTask - No Task Title",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": true,\r\n  \"priority\": 0,\r\n  \"delegatedUser\": \"{{TroyUserID}}\",\r\n  \"delegatedDate\": \"{{$isoTimestamp}}\",\r\n  \"delegateeClaimsCompleted\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostDelegatedTask - No User ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save ran into issues\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{$guid}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": true,\r\n  \"priority\": 0,\r\n  \"delegatedUser\": \"{{TroyUserID}}\",\r\n  \"delegatedDate\": \"{{$isoTimestamp}}\",\r\n  \"delegateeClaimsCompleted\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PostDelegatedTask - No ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"scheduledTime\": \"{{$isoTimestamp}}\",\r\n  \"taskTitle\": \"TEST {{$randomBs}} Task\",\r\n  \"completed\": false,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"isGoalTask\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": true,\r\n  \"priority\": 0,\r\n  \"delegatedUser\": \"{{TroyUserID}}\",\r\n  \"delegatedDate\": \"{{$isoTimestamp}}\",\r\n  \"delegateeClaimsCompleted\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDelegatedTaskByUserId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an array', () => {\r",
+									"    pm.expect(response).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									"pm.test('Get random delegated task with TEST in the title', () => {\r",
+									"    pm.expect(response.length).to.be.above(0);\r",
+									"\r",
+									"    var element = response.filter(function(item) { return item.taskTitle.includes ('TEST'); });\r",
+									"    if (element.length > 0) {\r",
+									"        const index = Math.trunc(Math.random() * element.length);\r",
+									"        const item = element[index];\r",
+									"        pm.collectionVariables.set('DelegatedTaskID', item.id);\r",
+									"    } \r",
+									"    \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/user/{{MikeUserID}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"user",
+								"{{MikeUserID}}",
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDelegatedTaskByID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var response = pm.response.json();\r",
+									"\r",
+									"pm.test('Response is an object', () => {\r",
+									"    pm.expect(response).to.be.an('object');\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test('Correct Value Was Retrieved', () => {\r",
+									"    const requestedTaskId = pm.collectionVariables.get('DelegatedTaskID');\r",
+									"    pm.expect(response.id).to.eql(requestedTaskId.toLowerCase());\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Title should be a String\", function () {\r",
+									"    pm.expect(response.taskTitle).to.be.a('string');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask?id={{DelegatedTaskID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{DelegatedTaskID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetDelTaskByReceiverID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/receiver/{{TroyUserID}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"receiver",
+								"{{TroyUserID}}",
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutDelegatedTask",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Save was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"{{DelegatedTaskID}}\",\r\n  \"lastModified\": \"{{$isoTimestamp}}\",\r\n  \"userId\": \"{{MikeUserID}}\",\r\n  \"scheduledTime\": \"2024-03-18T15:53:23.607Z\",\r\n  \"taskTitle\": \"TEST {{$randomBsBuzz}} Delegated Task\",\r\n  \"completed\": true,\r\n  \"archived\": false,\r\n  \"isDeleted\": false,\r\n  \"color\": \"{{$randomColor}}\",\r\n  \"isDelegatedTask\": true,\r\n  \"priority\": 0,\r\n  \"delegatedUser\": \"{{TroyUserID}}\",\r\n  \"delegateeClaimsCompleted\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeletedDelegatedTask",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Delete was successful\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/delegatedtask?id={{DelegatedTaskID}}",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"delegatedtask"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "{{DelegatedTaskID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ValueID",
+			"value": "8C13ECD4-4B4F-4E0F-813E-064AAD7DCA00"
+		},
+		{
+			"key": "TaskID",
+			"value": "90BD1ED4-9159-4539-9ADC-1127807E41A6"
+		},
+		{
+			"key": "GoalId",
+			"value": "12FDFE5F-21F2-4FE8-BEDB-02B21585B954"
+		},
+		{
+			"key": "UserId",
+			"value": "3fa85f64-5717-4562-b3fc-2c963f66afa6\n"
+		},
+		{
+			"key": "ValueCategoryId",
+			"value": "aec50867-a25e-4409-9edd-1c498d0736e9"
+		},
+		{
+			"key": "BaseUrl",
+			"value": "https://rememberapi-stage.graysea-b8a1917d.westus2.azurecontainerapps.io",
+			"type": "string"
+		},
+		{
+			"key": "CategoryID",
+			"value": ""
+		},
+		{
+			"key": "EmailId",
+			"value": ""
+		},
+		{
+			"key": "PhoneNumber",
+			"value": ""
+		},
+		{
+			"key": "PersonalValueId",
+			"value": "8c13ecd4-4b4f-4e0f-813e-064aad7dca00",
+			"type": "string"
+		},
+		{
+			"key": "JournalId",
+			"value": "753048fc-3666-48e3-b877-1fa99b618b4a",
+			"type": "string"
+		},
+		{
+			"key": "MikeUserID",
+			"value": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+			"type": "string"
+		},
+		{
+			"key": "TroyUserID",
+			"value": "8938109a-0bb5-43fe-85f6-027c53336790",
+			"type": "string"
+		},
+		{
+			"key": "DelegatedTaskID",
+			"value": ""
+		},
+		{
+			"key": "NoteID",
+			"value": ""
+		}
+	]
+}
